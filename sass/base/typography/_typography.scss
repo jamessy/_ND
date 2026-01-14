@@ -10,5 +10,15 @@ textarea {
 	line-height: $font__line-height-body;
 }
 
+/* Responsive Typography: Tablet and below
+--------------------------------------------- */
+@media screen and (max-width: 48em) {
+	/* Slightly reduce base font size for better mobile readability */
+	body {
+		font-size: 0.9375rem; /* 15px instead of 16px */
+		line-height: 1.6; /* Slightly increased for readability */
+	}
+}
+
 @import "headings";
 @import "copy";

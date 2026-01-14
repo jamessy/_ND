@@ -104,6 +104,57 @@
 	padding-right: 1rem;
 }
 
+/* Wrapper for main content and sidebar */
+/* Total width matches header/footer: 1200px */
+.site-main__wrapper {
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 0; /* No padding on wrapper, containers handle it */
+	padding-right: 0;
+	display: grid;
+	grid-template-columns: 1fr ($size__site-sidebar);
+	gap: var(--wp--preset--spacing--lg);
+	align-items: start;
+}
+
+/* Content area in grid - disable auto margins and adjust padding */
+.site-main__wrapper > .site-main__container {
+	max-width: 100%;
+	margin-left: 0; /* Disable auto margin when in grid */
+	margin-right: 0; /* Disable auto margin when in grid */
+	padding-left: 1rem; /* Match header/footer padding */
+	padding-right: 1rem;
+	min-width: 0; /* Prevent grid overflow */
+}
+
+/* Sidebar in grid - explicit padding to match header/footer right edge */
+.site-main__wrapper > .widget-area {
+	padding-right: 1rem; /* Match header/footer padding */
+	min-width: 0; /* Prevent grid overflow */
+}
+
+/* Responsive: Tablet and below - collapse to single column
+--------------------------------------------- */
+@media screen and (max-width: 48em) {
+	/* Stack sidebar below content */
+	.site-main__wrapper {
+		grid-template-columns: 1fr;
+	}
+
+	/* Both content and sidebar get full padding on mobile */
+	.site-main__wrapper > .site-main__container {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	.site-main__wrapper > .widget-area {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: var(--wp--preset--spacing--lg);
+	}
+}
+
 /* Responsive Header
 --------------------------------------------- */
 @media screen and (max-width: 37.5em) {
