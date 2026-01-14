@@ -1,0 +1,54 @@
+{
+  "name": "nd",
+  "version": "1.0.0",
+  "description": "A lightweight, developer-oriented WordPress theme based on Underscores. Gutenberg first, SCSS driven, performant, and reusable across projects.",
+  "author": "Your Name",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "WordPress",
+    "Theme",
+    "Gutenberg",
+    "Block Patterns"
+  ],
+  "homepage": "https://github.com/yourusername/nd#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/nd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/nd/issues"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^19.2.2",
+    "browser-sync": "^2.29.3",
+    "concurrently": "^8.2.2",
+    "dir-archiver": "^1.1.1",
+    "node-sass": "^7.0.1",
+    "rtlcss": "^3.5.0"
+  },
+  "rtlcssConfig": {
+    "options": {
+      "autoRename": false,
+      "autoRenameStrict": false,
+      "blacklist": {},
+      "clean": true,
+      "greedy": false,
+      "processUrls": false,
+      "stringMap": []
+    },
+    "plugins": [],
+    "map": false
+  },
+  "scripts": {
+    "build": "node build.js",
+    "watch": "concurrently \"npm run watch:css\" \"npm run watch:sync\"",
+    "watch:css": "node-sass sass/ -o dist/ --source-map true --output-style expanded --indent-type tab --indent-width 1 -w --watch sass/",
+    "watch:sync": "browser-sync start --config bs-config.js",
+    "compile:css": "node-sass sass/style.scss dist/style.css --source-map true --output-style compressed",
+    "compile:editor": "node-sass sass/editor-style.scss dist/editor-style.css --source-map true --output-style compressed",
+    "compile:rtl": "rtlcss dist/style.css dist/style-rtl.css",
+    "lint:scss": "wp-scripts lint-style 'sass/**/*.scss'",
+    "lint:js": "wp-scripts lint-js 'js/*.js'",
+    "bundle": "dir-archiver --src . --dest ../nd.zip --exclude .DS_Store .stylelintrc.json .eslintrc .git .gitattributes .github .gitignore README.md composer.json composer.lock node_modules vendor package-lock.json package.json .travis.yml phpcs.xml.dist sass style.css.map yarn.lock dist"
+  }
+}

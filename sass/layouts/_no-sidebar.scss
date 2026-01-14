@@ -1,0 +1,43 @@
+/* Default Layout: Full Width, No Sidebar
+--------------------------------------------- */
+.site {
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-areas:
+		"header"
+		"main"
+		"footer";
+}
+
+.site-header {
+	grid-area: header;
+}
+
+.site-main {
+	grid-area: main;
+}
+
+.site-footer {
+	grid-area: footer;
+}
+
+/* Hide sidebar when no-sidebar layout is active */
+.no-sidebar .widget-area {
+	display: none;
+}
+
+/* Show sidebar layout when has-sidebar class is present */
+.has-sidebar .site {
+	display: grid;
+	grid-template-columns: auto ($size__site-sidebar);
+	grid-template-areas:
+		"header header"
+		"main sidebar"
+		"footer footer";
+	gap: var(--wp--preset--spacing--lg);
+}
+
+.has-sidebar .widget-area {
+	grid-area: sidebar;
+	padding-top: var(--wp--preset--spacing--xl);
+}

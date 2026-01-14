@@ -1,0 +1,35 @@
+/* Sidebar-Content Layout (Sidebar on Left)
+--------------------------------------------- */
+/* 
+ * To enable this layout:
+ * 1. Comment out @import "layouts/no-sidebar" in style.scss
+ * 2. Uncomment @import "layouts/sidebar-content" in style.scss
+ */
+
+.site {
+	display: grid;
+	grid-template-columns: ($size__site-sidebar) auto;
+	grid-template-areas:
+		"header header"
+		"sidebar main"
+		"footer footer";
+	gap: var(--wp--preset--spacing--lg);
+}
+
+.site-header {
+	grid-area: header;
+}
+
+.site-main {
+	grid-area: main;
+	overflow: hidden; /* Resolves issue with <pre> elements forcing full width. */
+}
+
+.widget-area {
+	grid-area: sidebar;
+	padding-top: var(--wp--preset--spacing--xl);
+}
+
+.site-footer {
+	grid-area: footer;
+}

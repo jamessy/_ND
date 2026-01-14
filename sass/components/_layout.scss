@@ -1,0 +1,28 @@
+/*--------------------------------------------------------------
+# Layout Blocks
+--------------------------------------------------------------*/
+
+/* Group Block - Primary Container
+--------------------------------------------- */
+/* Group blocks only add padding when full-width or wide */
+.wp-block-group.alignfull,
+.wp-block-group.alignwide {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+/* Default Group blocks inherit container padding */
+.wp-block-group:not(.alignfull):not(.alignwide) {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+/* Columns Block
+--------------------------------------------- */
+.wp-block-columns {
+	margin-bottom: 0;
+}
+
+.wp-block-column > *:last-child {
+	margin-bottom: 0;
+}

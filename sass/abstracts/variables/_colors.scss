@@ -1,0 +1,26 @@
+// Color variables using CSS custom properties from theme.json
+// These reference the colors defined in theme.json which WordPress generates as CSS variables
+
+// Background colors
+$color__background-body: var(--wp--preset--color--white);
+$color__background-screen: var(--wp--preset--color--light);
+$color__background-hr: var(--wp--preset--color--gray-light);
+$color__background-button: #e6e6e6; // Neutral gray, not in palette
+$color__background-pre: #eee; // Neutral gray, not in palette
+$color__background-ins: #fff9c0; // Highlight color, not in palette
+
+// Text colors
+$color__text-screen: var(--wp--preset--color--info);
+$color__text-input: var(--wp--preset--color--gray);
+$color__text-input-focus: var(--wp--preset--color--black);
+$color__link: var(--wp--preset--color--primary);
+$color__link-visited: var(--wp--preset--color--secondary);
+$color__link-hover: var(--wp--preset--color--dark);
+$color__text-main: var(--wp--preset--color--gray-dark);
+
+// Border colors
+$color__border-button: var(--wp--preset--color--gray-light) var(--wp--preset--color--gray-light) var(--wp--preset--color--gray);
+$color__border-button-hover: var(--wp--preset--color--gray-light) var(--wp--preset--color--gray) var(--wp--preset--color--gray);
+$color__border-button-focus: var(--wp--preset--color--gray) var(--wp--preset--color--gray) var(--wp--preset--color--gray);
+$color__border-input: var(--wp--preset--color--gray-light);
+$color__border-abbr: var(--wp--preset--color--gray);
