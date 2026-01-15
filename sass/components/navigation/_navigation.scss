@@ -1,5 +1,10 @@
+/*--------------------------------------------------------------
+# Navigation
+--------------------------------------------------------------*/
+
 .main-navigation {
 	display: block;
+	position: relative;
 
 	ul {
 		display: none;
@@ -8,87 +13,315 @@
 		padding-left: 0;
 
 		ul {
-			box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-			float: left;
+			display: none; /* Hidden by default */
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 			position: absolute;
 			top: 100%;
-			left: -999em;
+			left: 0;
 			z-index: 99999;
+			background: var(--wp--preset--color--secondary); /* Background from theme.json */
+			min-width: 200px;
+			padding: var(--wp--preset--spacing--xs) 0;
+			border-radius: 4px;
+			margin-top: 0; /* Remove gap */
+			
+			/* Bridge gap with pseudo-element */
+			&::before {
+				content: '';
+				position: absolute;
+				top: -4px;
+				left: 0;
+				right: 0;
+				height: 4px;
+				background: transparent;
+			}
 
 			ul {
-				left: -999em;
+				left: 0;
 				top: 0;
 			}
 
 			li {
-
 				&:hover > ul,
 				&.focus > ul {
 					display: block;
-					left: auto;
 				}
 			}
 
 			a {
-				width: 200px;
+				padding: var(--wp--preset--spacing--xs) var(--wp--preset--spacing--md);
+				width: 100%;
+				color: var(--wp--preset--color--white);
+				font-size: var(--wp--preset--font-size--small);
+				transition: background-color 0.2s ease, color 0.2s ease;
+
+				&:hover,
+				&:focus {
+					background-color: rgba(255, 255, 255, 0.1);
+					color: var(--wp--preset--color--white);
+				}
 			}
 
-			:hover > a,
-			.focus > a {
-			}
-
-			a:hover,
-			a.focus {
+			.current_page_item > a,
+			.current-menu-item > a {
+				background-color: rgba(255, 255, 255, 0.15);
+				color: var(--wp--preset--color--white);
 			}
 		}
 
 		li:hover > ul,
 		li.focus > ul {
-			left: auto;
+			display: block;
+		}
+		
+		/* Keep submenu visible when hovering over it */
+		li > ul:hover {
+			display: block;
 		}
 	}
 
 	li {
 		position: relative;
-
-		&:hover > a,
-		&.focus > a {
-		}
 	}
 
 	a {
 		display: block;
 		text-decoration: none;
+		color: inherit;
+		transition: color 0.2s ease;
+
+		&:hover,
+		&:focus {
+			color: var(--wp--preset--color--primary);
+		}
 	}
 
 	.current_page_item > a,
 	.current-menu-item > a,
 	.current_page_ancestor > a,
 	.current-menu-ancestor > a {
+		color: var(--wp--preset--color--primary);
+		font-weight: 600;
 	}
 }
 
-/* Small menu. */
-.menu-toggle,
-.main-navigation.toggled ul {
-	display: block;
-}
+/* Menu Toggle Button (Hamburger)
+--------------------------------------------- */
+.menu-toggle {
+	display: flex; /* Show on mobile by default */
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	padding: var(--wp--preset--spacing--sm);
+	cursor: pointer;
+	position: relative;
+	width: 44px;
+	height: 44px;
+	margin-left: auto; /* Push to right */
+	z-index: 1000;
+	transition: transform 0.3s ease;
+	color: inherit; /* Inherit text color */
 
-@media screen and (min-width: 37.5em) {
-
-	.menu-toggle {
-		display: none;
+	&:hover,
+	&:focus {
+		outline: 2px solid var(--wp--preset--color--primary);
+		outline-offset: 2px;
 	}
 
-	.main-navigation ul {
+	.menu-toggle__text {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		border: 0;
+	}
+
+	.menu-toggle__icon {
 		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 24px;
+		height: 18px;
+		position: relative;
+	}
+
+	.menu-toggle__line {
+		display: block;
+		width: 100%;
+		height: 2px;
+		background: currentColor;
+		border-radius: 2px;
+		transition: all 0.3s ease;
+		transform-origin: center;
 	}
 }
 
+/* Animate hamburger to X when menu is toggled */
+.main-navigation.toggled .menu-toggle__line {
+	&:nth-child(1) {
+		transform: translateY(8px) rotate(45deg);
+	}
+
+	&:nth-child(2) {
+		opacity: 0;
+		transform: scaleX(0);
+	}
+
+	&:nth-child(3) {
+		transform: translateY(-8px) rotate(-45deg);
+	}
+}
+
+/* Mobile Menu Styles
+--------------------------------------------- */
+@media screen and (max-width: 37.5em) {
+	.main-navigation {
+		/* Reset desktop submenu styles for mobile */
+		ul ul {
+			position: static;
+			display: none;
+			background: var(--wp--preset--color--white);
+			box-shadow: none;
+			margin-top: 0;
+			padding: 0;
+			min-width: auto;
+			border-radius: 0;
+			
+			&::before {
+				display: none;
+			}
+		}
+
+		/* Show submenu when parent has focus class */
+		li.focus > ul,
+		li.menu-item-has-children.focus > ul {
+			display: block;
+		}
+
+		/* Show main menu when toggled */
+		&.toggled ul {
+			display: block !important;
+		}
+
+		&.toggled #primary-menu,
+		&.toggled > ul {
+			position: absolute;
+			top: 100%;
+			right: 0;
+			left: 0;
+			background: var(--wp--preset--color--white);
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			margin-top: var(--wp--preset--spacing--sm);
+			padding: var(--wp--preset--spacing--sm) 0;
+			z-index: 999;
+		}
+
+		&.toggled li {
+			border-bottom: 1px solid var(--wp--preset--color--gray-light);
+
+			&:last-child {
+				border-bottom: none;
+			}
+		}
+
+		&.toggled a {
+			padding: var(--wp--preset--spacing--sm) var(--wp--preset--spacing--md);
+			font-size: var(--wp--preset--font-size--base);
+			color: inherit;
+			display: block;
+		}
+
+		/* Submenu links styling */
+		&.toggled ul ul a {
+			padding-left: var(--wp--preset--spacing--lg);
+			font-size: var(--wp--preset--font-size--small);
+		}
+	}
+}
+
+/* Desktop Menu Styles
+--------------------------------------------- */
+@media screen and (min-width: 37.5em) {
+	.menu-toggle {
+		display: none !important; /* Force hide on desktop */
+	}
+
+	.main-navigation {
+		ul {
+			display: flex;
+			gap: var(--wp--preset--spacing--sm);
+			align-items: center;
+		}
+
+		li {
+			margin: 0;
+			position: relative;
+
+			/* Show submenu on hover */
+			&:hover > ul,
+			&.focus > ul {
+				display: block;
+				left: 0;
+			}
+		}
+
+		a {
+			padding: var(--wp--preset--spacing--sm) var(--wp--preset--spacing--sm);
+			white-space: nowrap;
+		}
+
+		/* Submenu positioning on desktop */
+		ul ul {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			margin-top: 0; /* Remove gap */
+		}
+
+		/* Ensure submenu is hidden by default */
+		li > ul {
+			display: none;
+		}
+
+		/* Show submenu on hover - maintain hover when moving to submenu */
+		li:hover > ul,
+		li.focus > ul {
+			display: block;
+		}
+
+		/* Keep submenu visible when hovering over it */
+		li > ul:hover {
+			display: block;
+		}
+
+		/* Reset mobile menu styles on desktop */
+		&.toggled ul {
+			position: static;
+			background: transparent;
+			box-shadow: none;
+			margin-top: 0;
+			padding: 0;
+		}
+
+		&.toggled li {
+			border-bottom: none;
+		}
+
+		&.toggled a {
+			padding: var(--wp--preset--spacing--sm) var(--wp--preset--spacing--sm);
+		}
+	}
+}
+
+/* Comment Navigation, Posts Navigation, Post Navigation
+--------------------------------------------- */
 .comment-navigation,
 .posts-navigation,
 .post-navigation {
-
 	.site-main & {
 		margin: 0 0 1.5em;
 	}

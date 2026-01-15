@@ -311,3 +311,100 @@ function nd_create_kitchen_sink_page() {
 	wp_insert_post( $page_data );
 }
 add_action( 'after_switch_theme', 'nd_create_kitchen_sink_page' );
+
+/**
+ * Create dummy pages and menu structure for submenu demonstration.
+ */
+function nd_create_submenu_pages() {
+	// Check if pages already exist
+	$parent_page = get_page_by_path( 'livery' );
+	
+	if ( ! $parent_page ) {
+		// Create parent "Livery" page
+		$parent_id = wp_insert_post( array(
+			'post_title'   => 'Livery',
+			'post_name'    => 'livery',
+			'post_content' => '<p>This is the Livery page. It demonstrates the submenu dropdown functionality.</p>',
+			'post_status' => 'publish',
+			'post_type'    => 'page',
+		) );
+	} else {
+		$parent_id = $parent_page->ID;
+	}
+
+	// Submenu pages
+	$submenu_pages = array(
+		'assisted-diy-flexi-livery' => 'Assisted DIY/ Flexi Livery',
+		'british-horse-society-approval-ratings' => 'British Horse Society Approval Ratings',
+		'the-livery' => 'The Livery',
+		'full-livery' => 'Full Livery',
+		'working-livery' => 'Working Livery',
+		'additional-livery-services' => 'Additional Livery Services',
+		'stable-management-horse-welfare-adults' => 'Stable Management and Horse Welfare for Adults',
+		'livery-yard-security' => 'Livery Yard Security',
+	);
+
+	foreach ( $submenu_pages as $slug => $title ) {
+		$existing_page = get_page_by_path( $slug );
+		if ( ! $existing_page ) {
+			wp_insert_post( array(
+				'post_title'   => $title,
+				'post_name'    => $slug,
+				'post_content' => '<p>This is the ' . esc_html( $title ) . ' page.</p>',
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+				'post_parent'  => $parent_id,
+			) );
+		}
+	}
+
+	// Create menu structure programmatically
+	$menu_name = 'Primary Menu';
+	$menu_exists = wp_get_nav_menu_object( $menu_name );
+
+	if ( ! $menu_exists ) {
+		$menu_id = wp_create_nav_menu( $menu_name );
+
+		// Add Livery parent menu item
+		wp_update_nav_menu_item( $menu_id, 0, array(
+			'menu-item-title'  => 'Livery',
+			'menu-item-url'    => get_permalink( $parent_id ),
+			'menu-item-status' => 'publish',
+			'menu-item-type'   => 'post_type',
+			'menu-item-object' => 'page',
+			'menu-item-object-id' => $parent_id,
+		) );
+
+		// Get the parent menu item ID
+		$menu_items = wp_get_nav_menu_items( $menu_id );
+		$parent_menu_item_id = 0;
+		foreach ( $menu_items as $item ) {
+			if ( $item->object_id == $parent_id ) {
+				$parent_menu_item_id = $item->ID;
+				break;
+			}
+		}
+
+		// Add submenu items
+		foreach ( $submenu_pages as $slug => $title ) {
+			$page = get_page_by_path( $slug );
+			if ( $page ) {
+				wp_update_nav_menu_item( $menu_id, 0, array(
+					'menu-item-title'     => $title,
+					'menu-item-url'        => get_permalink( $page->ID ),
+					'menu-item-status'    => 'publish',
+					'menu-item-type'      => 'post_type',
+					'menu-item-object'    => 'page',
+					'menu-item-object-id' => $page->ID,
+					'menu-item-parent-id' => $parent_menu_item_id,
+				) );
+			}
+		}
+
+		// Assign menu to location
+		$locations = get_theme_mod( 'nav_menu_locations' );
+		$locations['menu-1'] = $menu_id;
+		set_theme_mod( 'nav_menu_locations', $locations );
+	}
+}
+add_action( 'after_switch_theme', 'nd_create_submenu_pages' );

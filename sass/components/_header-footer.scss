@@ -159,11 +159,18 @@
 --------------------------------------------- */
 @media screen and (max-width: 37.5em) {
 	.site-header__container {
-		flex-direction: column;
-		align-items: flex-start;
+		position: relative;
+		padding-right: 0.5rem; /* Small padding for hamburger */
+	}
+
+	.site-branding {
+		flex: 1;
+		min-width: 0; /* Prevent overflow */
 	}
 
 	.main-navigation {
-		width: 100%;
+		position: static; /* Let it flow naturally */
+		margin-left: auto;
+		flex-shrink: 0; /* Prevent hamburger from shrinking */
 	}
 }
